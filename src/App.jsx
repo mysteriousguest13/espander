@@ -1,40 +1,4 @@
-import React, { useState, useEffect } from 'react'
-
-export default function App() {
-  const [properties, setProperties] = useState([])
-  const [filterType, setFilterType] = useState('all')
-
-  // Przykładowe dane do natychmiastowej weryfikacji wizualnej
-  const mockProperties = [
-    {
-      id: 1,
-      title: 'Luksusowy Apartament z widokiem na ocean',
-      location: 'Costa Adeje, Teneryfa',
-      price: 320000,
-      beds: 2,
-      baths: 2,
-      area: 85,
-      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
-      agency: 'GILMAR Real Estate'
-    },
-    {
-      id: 2,
-      title: 'Nowoczesny Penthouse blisko plaży',
-      location: 'Playa de las Américas, Teneryfa',
-      price: 450000,
-      beds: 3,
-      baths: 2,
-      area: 110,
-      image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80',
-      agency: 'Tenerife Property Investments'
-    }
-  ]
-
-  useEffect(() => {
-    setProperties(mockProperties)
-  }, [])
-
-  return (
+https://benevolent-vacherin-ada69d.netlify.app  return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
