@@ -1,40 +1,113 @@
-import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-// Podepnij swoje klucze z Supabase
-const SUPABASE_URL = 'https://dqqxryhjqocreiqmwqrt.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_AiJdkYc-W1cg9Dxxq8S3mQ_hwYS28Mw'; 
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+import React, { useState, useEffect } from 'react'
 
 export default function App() {
-  const [properties, setProperties] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [properties, setProperties] = useState([])
+  const [filterType, setFilterType] = useState('all')
 
-  // Filtry
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [propertyType, setPropertyType] = useState('');
+  // Przykładowe dane do natychmiastowej weryfikacji wizualnej
+  const mockProperties = [
+    {
+      id: 1,
+      title: 'Luksusowy Apartament z widokiem na ocean',
+      location: 'Costa Adeje, Teneryfa',
+      price: 320000,
+      beds: 2,
+      baths: 2,
+      area: 85,
+      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80',
+      agency: 'GILMAR Real Estate'
+    },
+    {
+      id: 2,
+      title: 'Nowoczesny Penthouse blisko plaży',
+      location: 'Playa de las Américas, Teneryfa',
+      price: 450000,
+      beds: 3,
+      baths: 2,
+      area: 110,
+      image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80',
+      agency: 'Tenerife Property Investments'
+    }
+  ]
 
   useEffect(() => {
-    fetchLocations();
-    fetchProperties();
-  }, []);
+    setProperties(mockProperties)
+  }, [])
 
-  async function fetchLocations() {
-    const { data } = await supabase.from('locations').select('*');
-    if (data) setLocations(data);
-  }
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+              ESPANDER
+            </span>
+            <span className="text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+              Teneryfa
+            </span>
+          </div>
+          <a
+            href="#contact"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition"
+          >
+            Dla Agencji (Zgłoś ofertę)
+          </a>
+        </div>
+      </header>
 
-  async function fetchProperties() {
-    setLoading(true);
-    let query = supabase.from('properties').select('*, locations(name), property_images(image_url)');
+      {/* Hero / Banner */}
+      <section className="bg-slate-900 text-white py-16 px-4 text-center relative overflow-hidden">
+        <div className="max-w-3xl mx-auto relative z-10">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+            Hiszpańskie Nieruchomości dla Polskich Inwestorów
+          </h1>
+          <p className="text-slate-300 text-lg mb-8">
+            Bezpośrednie oferty z weryfikowanych hiszpańskich agencji na Teneryfie. Bez pośredników, w języku polskim.
+          </p>
+        </div>
+      </section>
 
-    if (selectedLocation) {
-      query = query.eq('location_id', selectedLocation);
-    }
-    if (maxPrice) {
+      {/* Main Grid */}
+      <main className="max-w-7xl mx-auto px-4 py-12">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-slate-800">Aktualne Oferty na Teneryfie</h2>
+          <span className="text-sm text-slate-500">Liczba ofert: {properties.length}</span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {properties.map((item) => (
+            <div key={item.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition">
+              <div className="relative h-48 bg-slate-200">
+                <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                <span className="absolute top-3 right-3 bg-slate-900/80 text-white text-xs px-2.5 py-1 rounded-md backdrop-blur-sm">
+                  {item.agency}
+                </span>
+              </div>
+              <div className="p-5">
+                <div className="text-2xl font-extrabold text-blue-600 mb-1">
+                  €{item.price.toLocaleString()}
+                </div>
+                <h3 className="font-semibold text-slate-800 text-lg mb-2 line-clamp-1">{item.title}</h3>
+                <p className="text-slate-500 text-sm mb-4">📍 {item.location}</p>
+                <div className="flex items-center space-x-4 text-xs font-medium text-slate-600 pt-3 border-t border-slate-100">
+                  <span>🛏️ {item.beds} pokoje</span>
+                  <span>🚿 {item.baths} łazienki</span>
+                  <span>📐 {item.area} m²</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-center text-sm">
+        <p>© 2026 Espander. Automated Real Estate Portal for Spanish Agencies.</p>
+      </footer>
+    </div>
+  )
+}    if (maxPrice) {
       query = query.lte('price', Number(maxPrice));
     }
     if (propertyType) {
